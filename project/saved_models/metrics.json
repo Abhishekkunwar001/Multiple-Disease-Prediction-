@@ -1,0 +1,339 @@
+{
+  "diabetes": {
+    "Logistic Regression": {
+      "accuracy": 90.97,
+      "precision": 86.3,
+      "recall": 75.94,
+      "f1": 80.79,
+      "confusion_matrix": [
+        [
+          4895,
+          205
+        ],
+        [
+          409,
+          1291
+        ]
+      ],
+      "feature_importance": {
+        "gender": 0.1217,
+        "age": 1.0733,
+        "hypertension": 0.2947,
+        "heart_disease": 0.1878,
+        "smoking_history": 0.0461,
+        "bmi": 0.6872,
+        "HbA1c_level": 2.5677,
+        "blood_glucose_level": 1.5651
+      }
+    },
+    "Random Forest": {
+      "accuracy": 92.75,
+      "precision": 93.76,
+      "recall": 76.06,
+      "f1": 83.99,
+      "confusion_matrix": [
+        [
+          5014,
+          86
+        ],
+        [
+          407,
+          1293
+        ]
+      ],
+      "feature_importance": {
+        "gender": 0.0032,
+        "age": 0.1107,
+        "hypertension": 0.0304,
+        "heart_disease": 0.0181,
+        "smoking_history": 0.0122,
+        "bmi": 0.0721,
+        "HbA1c_level": 0.4135,
+        "blood_glucose_level": 0.3398
+      }
+    },
+    "XGBoost": {
+      "accuracy": 92.37,
+      "precision": 88.12,
+      "recall": 80.29,
+      "f1": 84.03,
+      "confusion_matrix": [
+        [
+          4916,
+          184
+        ],
+        [
+          335,
+          1365
+        ]
+      ],
+      "feature_importance": {
+        "gender": 0.0196,
+        "age": 0.0444,
+        "hypertension": 0.061,
+        "heart_disease": 0.0764,
+        "smoking_history": 0.0223,
+        "bmi": 0.0264,
+        "HbA1c_level": 0.4823,
+        "blood_glucose_level": 0.2674
+      }
+    },
+    "best_model": "Random Forest",
+    "best_accuracy": 92.75,
+    "features": [
+      "gender",
+      "age",
+      "hypertension",
+      "heart_disease",
+      "smoking_history",
+      "bmi",
+      "HbA1c_level",
+      "blood_glucose_level"
+    ],
+    "dataset": {
+      "total": 100000,
+      "features": 8,
+      "train": 27200,
+      "test": 6800
+    },
+    "encoders": {
+      "smoking_history": {
+        "0": "never",
+        "1": "No Info",
+        "2": "current",
+        "3": "former",
+        "4": "ever",
+        "5": "not current"
+      },
+      "gender": {
+        "0": "Female",
+        "1": "Male",
+        "2": "Other"
+      }
+    },
+    "feature_labels": {
+      "gender": "Gender",
+      "age": "Age",
+      "hypertension": "Hypertension",
+      "heart_disease": "Heart Disease",
+      "smoking_history": "Smoking History",
+      "bmi": "BMI",
+      "HbA1c_level": "HbA1c Level",
+      "blood_glucose_level": "Blood Glucose"
+    }
+  },
+  "heart": {
+    "Logistic Regression": {
+      "accuracy": 72.67,
+      "precision": 75.17,
+      "recall": 66.88,
+      "f1": 70.78,
+      "confusion_matrix": [
+        [
+          5441,
+          1503
+        ],
+        [
+          2254,
+          4551
+        ]
+      ],
+      "feature_importance": {
+        "age_years": 0.3501,
+        "gender": 0.0036,
+        "height": 0.0857,
+        "weight": 0.2353,
+        "bmi": 0.0706,
+        "ap_hi": 0.8926,
+        "ap_lo": 0.1609,
+        "cholesterol": 0.3309,
+        "gluc": 0.0703,
+        "smoke": 0.0402,
+        "alco": 0.0442,
+        "active": 0.088
+      }
+    },
+    "Random Forest": {
+      "accuracy": 73.58,
+      "precision": 75.35,
+      "recall": 69.27,
+      "f1": 72.18,
+      "confusion_matrix": [
+        [
+          5402,
+          1542
+        ],
+        [
+          2091,
+          4714
+        ]
+      ],
+      "feature_importance": {
+        "age_years": 0.1463,
+        "gender": 0.0072,
+        "height": 0.0436,
+        "weight": 0.0573,
+        "bmi": 0.0734,
+        "ap_hi": 0.3966,
+        "ap_lo": 0.1639,
+        "cholesterol": 0.074,
+        "gluc": 0.0152,
+        "smoke": 0.0066,
+        "alco": 0.0055,
+        "active": 0.0104
+      }
+    },
+    "XGBoost": {
+      "accuracy": 73.1,
+      "precision": 74.49,
+      "recall": 69.42,
+      "f1": 71.86,
+      "confusion_matrix": [
+        [
+          5326,
+          1618
+        ],
+        [
+          2081,
+          4724
+        ]
+      ],
+      "feature_importance": {
+        "age_years": 0.0594,
+        "gender": 0.0332,
+        "height": 0.0297,
+        "weight": 0.0306,
+        "bmi": 0.0368,
+        "ap_hi": 0.4446,
+        "ap_lo": 0.0386,
+        "cholesterol": 0.1473,
+        "gluc": 0.0446,
+        "smoke": 0.046,
+        "alco": 0.0433,
+        "active": 0.0459
+      }
+    },
+    "best_model": "Random Forest",
+    "best_accuracy": 73.58,
+    "features": [
+      "age_years",
+      "gender",
+      "height",
+      "weight",
+      "bmi",
+      "ap_hi",
+      "ap_lo",
+      "cholesterol",
+      "gluc",
+      "smoke",
+      "alco",
+      "active"
+    ],
+    "dataset": {
+      "total": 68742,
+      "features": 12,
+      "train": 54993,
+      "test": 13749
+    },
+    "feature_labels": {
+      "age_years": "Age (years)",
+      "gender": "Gender",
+      "height": "Height (cm)",
+      "weight": "Weight (kg)",
+      "bmi": "BMI",
+      "ap_hi": "Systolic BP",
+      "ap_lo": "Diastolic BP",
+      "cholesterol": "Cholesterol",
+      "gluc": "Glucose",
+      "smoke": "Smoker",
+      "alco": "Alcohol",
+      "active": "Physically Active"
+    }
+  },
+  "scaler_params": {
+    "diabetes": {
+      "mean_": [
+        0.4252941176470588,
+        45.33205529411753,
+        0.10429411764705883,
+        0.058470588235294114,
+        1.3551470588235295,
+        28.182834411759654,
+        5.784111764706499,
+        148.2034411764706
+      ],
+      "scale_": [
+        0.49480379530438107,
+        22.53189877352685,
+        0.3056417096392526,
+        0.23463115425431713,
+        1.4877598563405896,
+        7.036699060989216,
+        1.2000359942555936,
+        49.305113026049895
+      ]
+    },
+    "heart": {
+      "mean_": [
+        53.29102586482791,
+        1.348724215181403,
+        164.39504233219864,
+        74.1233583544267,
+        27.473317622414243,
+        126.61649355561374,
+        81.38231357830729,
+        1.36479881295278,
+        1.2260917634051962,
+        0.08799569404439789,
+        0.05363533211137296,
+        0.8033807570335457
+      ],
+      "scale_": [
+        6.757256095014233,
+        0.4765665083988986,
+        7.97880785939232,
+        14.306534756999213,
+        5.352013169630182,
+        16.764044157343513,
+        9.676617374598717,
+        0.6790220640173686,
+        0.5720610246364688,
+        0.283288637036579,
+        0.2252966561240439,
+        0.39744196590414643
+      ]
+    }
+  },
+  "lr_coefs": {
+    "diabetes": {
+      "intercept": -2.699910749605226,
+      "coef": [
+        0.12172245124152559,
+        1.073307677691768,
+        0.2946738348659234,
+        0.18778445715563732,
+        0.04608544048154071,
+        0.6871516113307574,
+        2.5677365226506406,
+        1.565130799350959
+      ]
+    },
+    "heart": {
+      "intercept": 0.02638797869816968,
+      "coef": [
+        0.3500986661049967,
+        -0.0036062883984299124,
+        -0.08568658830314684,
+        0.23530344185416285,
+        -0.07064838200723413,
+        0.8925946441160528,
+        0.16087642147080616,
+        0.3309470764851841,
+        -0.07029932092204276,
+        -0.040151866657013084,
+        -0.04423023324819097,
+        -0.08801547193325478
+      ]
+    }
+  }
+}

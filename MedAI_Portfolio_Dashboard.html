@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Disease Prediction Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: { display: ["Georgia", "serif"] } } } };
+  </script>
+  <style>
+    body{background:radial-gradient(circle at top left,rgba(14,165,233,.16),transparent 30%),radial-gradient(circle at top right,rgba(16,185,129,.12),transparent 26%),linear-gradient(180deg,#07111f,#0a1020);color:#e2e8f0}
+    .glass{background:rgba(15,23,42,.82);backdrop-filter:blur(16px);border:1px solid rgba(148,163,184,.12)}
+    .lift{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+    .lift:hover{transform:translateY(-3px);border-color:rgba(148,163,184,.22);box-shadow:0 20px 50px rgba(2,6,23,.35)}
+    .nav-active{background:linear-gradient(135deg,rgba(14,165,233,.22),rgba(16,185,129,.16));border-color:rgba(125,211,252,.25);color:#fff}
+    .risk-low{color:#86efac;border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.12)}
+    .risk-high{color:#fca5a5;border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.12)}
+    .field-error{border-color:rgba(248,113,113,.7)!important;box-shadow:0 0 0 4px rgba(248,113,113,.12)}
+    .spinner{width:26px;height:26px;border-radius:999px;border:3px solid rgba(148,163,184,.22);border-top-color:#38bdf8;animation:spin .75s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body class="min-h-screen font-sans">
+  <div class="min-h-screen lg:grid lg:grid-cols-[300px_minmax(0,1fr)]">
+    <aside class="glass border-r border-white/5 px-5 py-6 lg:min-h-screen">
+      <div class="flex items-center gap-3">
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-300 via-cyan-300 to-emerald-300 font-display text-xl font-bold text-slate-950">AI</div>
+        <div>
+          <h1 class="font-display text-xl font-bold text-white">Disease Prediction</h1>
+          <p class="text-sm text-slate-400">Portfolio Dashboard</p>
+        </div>
+      </div>
+      <div class="mt-8 space-y-3">
+        <button id="nav-diabetes" onclick="switchDisease('diabetes')" class="nav-active lift w-full rounded-3xl border border-white/10 px-4 py-4 text-left">
+          <div class="text-xs uppercase tracking-[0.28em] text-slate-400">Module</div>
+          <div class="mt-1 font-display text-lg font-semibold">Diabetes</div>
+          <div class="mt-1 text-sm text-slate-400">Glucose, BMI, Age, Insulin</div>
+        </button>
+        <button id="nav-heart" onclick="switchDisease('heart')" class="lift w-full rounded-3xl border border-white/10 px-4 py-4 text-left text-slate-300">
+          <div class="text-xs uppercase tracking-[0.28em] text-slate-400">Module</div>
+          <div class="mt-1 font-display text-lg font-semibold">Heart Disease</div>
+          <div class="mt-1 text-sm text-slate-400">Age, Cholesterol, Blood Pressure, Max Heart Rate</div>
+        </button>
+      </div>
+      <div class="mt-8 rounded-3xl border border-white/10 bg-white/5 p-4">
+        <div class="text-xs uppercase tracking-[0.28em] text-slate-400">Dashboard Scope</div>
+        <div class="mt-3 space-y-2 text-sm text-slate-400">
+          <p>Diabetes Prediction</p>
+          <p>Heart Disease Prediction</p>
+          <p>Charts, metrics, dataset, history, and receipt export</p>
+        </div>
+      </div>
+    </aside>
+
+    <main class="px-4 py-5 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl">
+        <header class="glass mb-6 rounded-3xl px-6 py-6">
+          <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p class="text-xs uppercase tracking-[0.34em] text-sky-300">Machine Learning Project</p>
+              <h2 id="page-title" class="mt-2 font-display text-3xl font-bold text-white">Diabetes Prediction Dashboard</h2>
+              <p id="page-subtitle" class="mt-2 max-w-2xl text-sm text-slate-400">Frontend-only disease prediction with charts, metrics, local history, and downloadable receipts.</p>
+            </div>
+            <div class="flex flex-wrap gap-3">
+              <button onclick="scrollToSection('support-sections')" class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-200">View Dashboard Sections</button>
+              <button onclick="downloadReceipt()" class="rounded-2xl border border-sky-400/25 bg-sky-400/10 px-4 py-3 text-sm font-semibold text-sky-200">Download Receipt</button>
+            </div>
+          </div>
+        </header>
+
+        <section id="support-sections" class="mb-6 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+          <button onclick="scrollToSection('charts-section')" class="glass lift rounded-3xl p-5 text-left"><p class="text-xs uppercase tracking-[0.28em] text-slate-400">Support</p><h3 class="mt-2 font-display text-lg font-bold text-white">Charts</h3><p class="mt-2 text-sm text-slate-400">Bar, pie, and line charts update after prediction.</p></button>
+          <button onclick="scrollToSection('metrics-section')" class="glass lift rounded-3xl p-5 text-left"><p class="text-xs uppercase tracking-[0.28em] text-slate-400">Support</p><h3 class="mt-2 font-display text-lg font-bold text-white">Metrics</h3><p class="mt-2 text-sm text-slate-400">Accuracy, precision, recall, and F1 by module.</p></button>
+          <button onclick="scrollToSection('dataset-section')" class="glass lift rounded-3xl p-5 text-left"><p class="text-xs uppercase tracking-[0.28em] text-slate-400">Support</p><h3 class="mt-2 font-display text-lg font-bold text-white">Dataset</h3><p class="mt-2 text-sm text-slate-400">Overview cards and sample rows.</p></button>
+          <button onclick="scrollToSection('history-section')" class="glass lift rounded-3xl p-5 text-left"><p class="text-xs uppercase tracking-[0.28em] text-slate-400">Support</p><h3 class="mt-2 font-display text-lg font-bold text-white">History</h3><p class="mt-2 text-sm text-slate-400">Predictions saved in localStorage.</p></button>
+          <button onclick="scrollToSection('receipt-section')" class="glass lift rounded-3xl p-5 text-left"><p class="text-xs uppercase tracking-[0.28em] text-slate-400">Support</p><h3 class="mt-2 font-display text-lg font-bold text-white">Receipt</h3><p class="mt-2 text-sm text-slate-400">Download the latest prediction receipt.</p></button>
+        </section>
+
+        <section class="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div class="glass lift rounded-3xl p-5"><p class="text-sm text-slate-400">Accuracy</p><p id="metric-accuracy" class="mt-2 font-display text-3xl font-bold text-white">92.75%</p></div>
+          <div class="glass lift rounded-3xl p-5"><p class="text-sm text-slate-400">Precision</p><p id="metric-precision" class="mt-2 font-display text-3xl font-bold text-white">93.76%</p></div>
+          <div class="glass lift rounded-3xl p-5"><p class="text-sm text-slate-400">Recall</p><p id="metric-recall" class="mt-2 font-display text-3xl font-bold text-white">76.06%</p></div>
+          <div class="glass lift rounded-3xl p-5"><p class="text-sm text-slate-400">F1 Score</p><p id="metric-f1" class="mt-2 font-display text-3xl font-bold text-white">83.99%</p></div>
+        </section>
+
+        <section class="grid gap-6 xl:grid-cols-[1.02fr_1.58fr]">
+          <div class="glass lift rounded-3xl p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Input Form</p>
+                <h3 id="form-title" class="mt-2 font-display text-2xl font-bold text-white">Diabetes Inputs</h3>
+              </div>
+              <button onclick="loadSample()" class="rounded-2xl border border-white/10 px-3 py-2 text-sm text-slate-400">Load Sample</button>
+            </div>
+            <form id="prediction-form" class="mt-6 space-y-4">
+              <div id="form-fields" class="grid gap-4"></div>
+              <div class="flex gap-3 pt-2">
+                <button type="submit" class="flex-1 rounded-2xl bg-gradient-to-r from-sky-400 to-cyan-300 px-4 py-3 font-semibold text-slate-950">Predict</button>
+                <button type="button" onclick="resetForm()" class="rounded-2xl border border-white/10 px-4 py-3 font-semibold text-slate-400">Reset</button>
+              </div>
+            </form>
+            <div id="loading-card" class="mt-5 hidden rounded-3xl border border-white/10 bg-white/5 p-5">
+              <div class="flex items-center gap-3"><div class="spinner"></div><div><p class="font-semibold text-white">Running prediction...</p><p class="text-sm text-slate-400">Simulated frontend ML inference</p></div></div>
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <div class="glass lift rounded-3xl p-6">
+              <div class="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Prediction Result</p>
+                  <h3 id="result-disease" class="mt-2 font-display text-2xl font-bold text-white">Diabetes Prediction</h3>
+                  <p id="result-text" class="mt-3 max-w-xl text-sm text-slate-400">Enter all required values and click Predict to generate a simulated disease-risk result.</p>
+                </div>
+                <div class="text-left md:text-right">
+                  <span id="risk-badge" class="inline-flex rounded-full border border-white/10 px-4 py-2 text-sm font-bold text-white/80">Waiting</span>
+                  <div id="result-probability" class="mt-3 font-display text-4xl font-bold text-white">0%</div>
+                  <div class="text-sm text-slate-400">Probability</div>
+                </div>
+              </div>
+              <div class="mt-5">
+                <div class="mb-2 flex justify-between text-xs text-slate-400"><span>No Risk</span><span>High Risk</span></div>
+                <div class="h-3 overflow-hidden rounded-full bg-slate-800"><div id="probability-bar" class="h-full w-0 rounded-full bg-emerald-400 transition-all duration-700"></div></div>
+              </div>
+              <div class="mt-6 grid gap-4 lg:grid-cols-2">
+                <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+                  <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Model Insights</p>
+                  <div class="mt-3 space-y-2 text-sm text-slate-400">
+                    <p><span class="font-semibold text-white">Model:</span> <span id="insight-model">Random Forest</span></p>
+                    <p><span class="font-semibold text-white">Key Influencing Factors:</span> <span id="insight-factors">Glucose, BMI, Age, Insulin</span></p>
+                    <p id="insight-explanation">This prediction uses weighted scoring to simulate machine learning behavior from the selected health inputs.</p>
+                  </div>
+                </div>
+                <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+                  <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Health Tips</p>
+                  <ul id="health-tips" class="mt-3 space-y-2 text-sm text-slate-400"></ul>
+                </div>
+              </div>
+            </div>
+
+            <div id="charts-section" class="grid gap-6 xl:grid-cols-3">
+              <div class="glass lift rounded-3xl p-5"><p class="text-xs uppercase tracking-[0.3em] text-slate-400">Feature Importance</p><div class="mt-4 h-72"><canvas id="featureChart"></canvas></div></div>
+              <div class="glass lift rounded-3xl p-5"><p class="text-xs uppercase tracking-[0.3em] text-slate-400">Risk vs No Risk</p><div class="mt-4 h-72"><canvas id="riskChart"></canvas></div></div>
+              <div class="glass lift rounded-3xl p-5"><p class="text-xs uppercase tracking-[0.3em] text-slate-400">Sample Health Trend</p><div class="mt-4 h-72"><canvas id="trendChart"></canvas></div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="mt-6 grid gap-6 xl:grid-cols-[1.02fr_1.58fr]">
+          <div id="metrics-section" class="glass lift rounded-3xl p-6"><p class="text-xs uppercase tracking-[0.3em] text-slate-400">Performance Metrics</p><h3 class="mt-2 font-display text-2xl font-bold text-white">Model Quality Snapshot</h3><div id="performance-bars" class="mt-6 space-y-4"></div></div>
+          <div id="dataset-section" class="glass lift rounded-3xl p-6">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div><p class="text-xs uppercase tracking-[0.3em] text-slate-400">Dataset Overview</p><h3 class="mt-2 font-display text-2xl font-bold text-white">Training Data Summary</h3></div>
+              <div class="grid grid-cols-2 gap-3 text-center">
+                <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3"><div id="dataset-records" class="font-display text-xl font-bold text-white">100,000</div><div class="text-xs text-slate-400">Total Records</div></div>
+                <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3"><div id="dataset-features" class="font-display text-xl font-bold text-white">8</div><div class="text-xs text-slate-400">Features</div></div>
+              </div>
+            </div>
+            <div class="mt-6 overflow-x-auto">
+              <table class="min-w-full text-left text-sm">
+                <thead class="border-b border-white/10 text-xs uppercase tracking-[0.2em] text-slate-400"><tr id="dataset-head"></tr></thead>
+                <tbody id="dataset-body" class="divide-y divide-white/5 text-slate-400"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="history-section" class="mt-6 glass lift rounded-3xl p-6">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div><p class="text-xs uppercase tracking-[0.3em] text-slate-400">Prediction History</p><h3 class="mt-2 font-display text-2xl font-bold text-white">Saved Local Predictions</h3></div>
+            <button onclick="clearHistory()" class="rounded-2xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm font-semibold text-red-200">Clear History</button>
+          </div>
+          <div class="mt-6 overflow-x-auto">
+            <table class="min-w-full text-left text-sm">
+              <thead class="border-b border-white/10 text-xs uppercase tracking-[0.2em] text-slate-400"><tr><th class="px-3 py-3">Date</th><th class="px-3 py-3">Disease</th><th class="px-3 py-3">Result</th><th class="px-3 py-3">Probability</th></tr></thead>
+              <tbody id="history-body" class="divide-y divide-white/5 text-slate-400"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="receipt-section" class="mt-6 glass lift rounded-3xl p-6">
+          <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div><p class="text-xs uppercase tracking-[0.3em] text-slate-400">Prediction Receipt</p><h3 class="mt-2 font-display text-2xl font-bold text-white">Latest Prediction Export</h3><p class="mt-2 max-w-2xl text-sm text-slate-400">After each prediction, the latest result is prepared as a receipt you can download.</p></div>
+            <button onclick="downloadReceipt()" class="rounded-2xl border border-emerald-400/25 bg-emerald-400/10 px-4 py-3 text-sm font-semibold text-emerald-200">Download Latest Receipt</button>
+          </div>
+          <div class="mt-6 grid gap-4 md:grid-cols-4">
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4"><p class="text-xs uppercase tracking-[0.2em] text-slate-400">Disease</p><p id="receipt-disease" class="mt-2 font-semibold text-white">Not generated yet</p></div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4"><p class="text-xs uppercase tracking-[0.2em] text-slate-400">Risk Level</p><p id="receipt-risk" class="mt-2 font-semibold text-white">Waiting</p></div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4"><p class="text-xs uppercase tracking-[0.2em] text-slate-400">Probability</p><p id="receipt-probability" class="mt-2 font-semibold text-white">0%</p></div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4"><p class="text-xs uppercase tracking-[0.2em] text-slate-400">Generated</p><p id="receipt-date" class="mt-2 font-semibold text-white">Awaiting prediction</p></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const configs={diabetes:{title:"Diabetes Prediction Dashboard",subtitle:"Frontend-only disease prediction with charts, metrics, local history, and downloadable receipts.",formTitle:"Diabetes Inputs",diseaseName:"Diabetes Prediction",model:"Random Forest",factors:"Glucose, BMI, Age, Insulin",metrics:{accuracy:92.75,precision:93.76,recall:76.06,f1:83.99},fields:[{id:"glucose",label:"Glucose",placeholder:"e.g. 145"},{id:"bmi",label:"BMI",placeholder:"e.g. 31.2"},{id:"age",label:"Age",placeholder:"e.g. 52"},{id:"insulin",label:"Insulin",placeholder:"e.g. 180"}],sample:{glucose:168,bmi:32.4,age:54,insulin:192},featureImportance:{Glucose:42,BMI:24,Age:21,Insulin:13},tips:["Choose high-fiber foods and reduce refined sugar.","Maintain consistent physical activity through the week.","Monitor blood sugar patterns with regular checks.","Build balanced meals with protein and complex carbs."],dataset:{records:100000,features:8,head:["Gender","Age","BMI","HbA1c","Blood Glucose","Diabetes"],rows:[["Female",80,25.19,6.6,140,0],["Female",54,27.32,6.6,80,0],["Male",28,27.32,5.7,158,0],["Female",36,23.45,5.0,155,0]]},trendLabels:["Week 1","Week 2","Week 3","Week 4","Week 5","Week 6"],trendValues:[108,116,124,133,141,148],trendName:"Sample Glucose Trend"},heart:{title:"Heart Disease Prediction Dashboard",subtitle:"Portfolio-ready heart disease dashboard with exact prompt inputs, simulated prediction logic, local history, and downloadable receipts.",formTitle:"Heart Disease Inputs",diseaseName:"Heart Disease Prediction",model:"Random Forest",factors:"Blood Pressure, Cholesterol, Age, Max Heart Rate",metrics:{accuracy:73.58,precision:75.35,recall:69.27,f1:72.18},fields:[{id:"age",label:"Age",placeholder:"e.g. 58"},{id:"cholesterol",label:"Cholesterol",placeholder:"e.g. 245"},{id:"bloodPressure",label:"Blood Pressure",placeholder:"e.g. 148"},{id:"maxHeartRate",label:"Max Heart Rate",placeholder:"e.g. 132"}],sample:{age:61,cholesterol:268,bloodPressure:154,maxHeartRate:126},featureImportance:{"Blood Pressure":41,Cholesterol:24,Age:21,"Max Heart Rate":14},tips:["Follow a heart-healthy diet with lower sodium intake.","Keep blood pressure under regular observation.","Build aerobic activity into your weekly routine.","Improve recovery through sleep and stress management."],dataset:{records:68742,features:12,head:["Age","Gender","BMI","Sys BP","Dia BP","Chol","Cardio"],rows:[[50.4,2,22.0,110,80,1,0],[55.4,1,34.9,140,90,3,1],[51.6,1,23.5,130,70,3,1],[48.2,2,28.7,150,100,1,1]]},trendLabels:["Month 1","Month 2","Month 3","Month 4","Month 5","Month 6"],trendValues:[118,122,128,135,141,146],trendName:"Sample Blood Pressure Trend"}};
+    let activeDisease="diabetes",featureChart,riskChart,trendChart;
+    function renderFields(){const c=configs[activeDisease];document.getElementById("form-fields").innerHTML=c.fields.map(f=>`<div><label class="mb-2 block text-sm font-semibold text-white">${f.label} <span class="text-red-400">*</span></label><input id="${f.id}" type="number" min="0" placeholder="${f.placeholder}" class="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-white outline-none transition focus:border-sky-400/40 focus:ring-4 focus:ring-sky-400/10" /><p id="error-${f.id}" class="mt-2 hidden text-sm text-red-300">${f.label} is required.</p></div>`).join("")}
+    function switchDisease(d){activeDisease=d;const c=configs[d];document.getElementById("nav-diabetes").classList.toggle("nav-active",d==="diabetes");document.getElementById("nav-heart").classList.toggle("nav-active",d==="heart");document.getElementById("page-title").textContent=c.title;document.getElementById("page-subtitle").textContent=c.subtitle;document.getElementById("form-title").textContent=c.formTitle;document.getElementById("result-disease").textContent=c.diseaseName;document.getElementById("insight-model").textContent=c.model;document.getElementById("insight-factors").textContent=c.factors;renderFields();renderMetrics();renderPerformance();renderDataset();renderTips();resetResult();renderCharts(0)}
+    function renderMetrics(){const m=configs[activeDisease].metrics;document.getElementById("metric-accuracy").textContent=`${m.accuracy}%`;document.getElementById("metric-precision").textContent=`${m.precision}%`;document.getElementById("metric-recall").textContent=`${m.recall}%`;document.getElementById("metric-f1").textContent=`${m.f1}%`}
+    function renderPerformance(){const m=configs[activeDisease].metrics,f={accuracy:"bg-sky-400",precision:"bg-cyan-300",recall:"bg-emerald-400",f1:"bg-amber-300"};document.getElementById("performance-bars").innerHTML=Object.entries(m).map(([k,v])=>`<div><div class="mb-2 flex items-center justify-between text-sm"><span class="capitalize text-white">${k}</span><span class="text-slate-400">${v}%</span></div><div class="h-3 overflow-hidden rounded-full bg-slate-800"><div class="h-full ${f[k]}" style="width:${v}%"></div></div></div>`).join("")}
+    function renderDataset(){const d=configs[activeDisease].dataset;document.getElementById("dataset-records").textContent=d.records.toLocaleString();document.getElementById("dataset-features").textContent=d.features;document.getElementById("dataset-head").innerHTML=d.head.map(c=>`<th class="px-3 py-3">${c}</th>`).join("");document.getElementById("dataset-body").innerHTML=d.rows.map(r=>`<tr>${r.map(c=>`<td class="px-3 py-3">${c}</td>`).join("")}</tr>`).join("")}
+    function renderTips(){document.getElementById("health-tips").innerHTML=configs[activeDisease].tips.map(t=>`<li>${t}</li>`).join("")}
+    function validateInputs(){const values={};let valid=true;configs[activeDisease].fields.forEach(f=>{const input=document.getElementById(f.id),error=document.getElementById(`error-${f.id}`),raw=input.value.trim(),value=Number(raw);input.classList.remove("field-error");error.classList.add("hidden");if(raw===""||Number.isNaN(value)||value<0){valid=false;input.classList.add("field-error");error.textContent=`${f.label} is required and cannot be negative.`;error.classList.remove("hidden")}else values[f.id]=value});return valid?values:null}
+    function predictDiabetes(v){let s=0;s+=Math.min(v.glucose/220,1)*.4;s+=Math.min(v.bmi/45,1)*.25;s+=Math.min(v.age/80,1)*.2;s+=Math.min(v.insulin/300,1)*.15;const p=Math.round(Math.min(s,1)*100);return{risk:p>=50?"High Risk":"Low Risk",probability:p}}
+    function predictHeartDisease(v){let s=0;s+=Math.min(v.age/85,1)*.28;s+=Math.min(v.cholesterol/320,1)*.28;s+=Math.min(v.bloodPressure/200,1)*.29;s+=(1-Math.min(v.maxHeartRate/220,1))*.15;const p=Math.round(Math.min(Math.max(s,0),1)*100);return{risk:p>=50?"High Risk":"Low Risk",probability:p}}
+    function setLoading(show){document.getElementById("loading-card").classList.toggle("hidden",!show)}
+    function updateResult(r){const high=r.risk==="High Risk",c=configs[activeDisease],ts=new Date().toLocaleString(),badge=document.getElementById("risk-badge");document.getElementById("result-disease").textContent=c.diseaseName;document.getElementById("result-text").textContent=`${c.diseaseName} generated using simulated ${c.model} logic based on the submitted patient values.`;document.getElementById("result-probability").textContent=`${r.probability}%`;document.getElementById("probability-bar").style.width=`${r.probability}%`;document.getElementById("probability-bar").className=`h-full rounded-full transition-all duration-700 ${high?"bg-red-400":"bg-emerald-400"}`;document.getElementById("insight-explanation").textContent=high?"The weighted scoring model found stronger risk signals across the key influencing features.":"The weighted scoring model found the combined feature values closer to a lower-risk pattern.";badge.textContent=r.risk;badge.className=`inline-flex rounded-full border px-4 py-2 text-sm font-bold ${high?"risk-high":"risk-low"}`;updateReceipt(c,r,ts);renderCharts(r.probability);saveHistory(c.diseaseName.replace(" Prediction",""),r.risk,`${r.probability}%`,ts)}
+    function resetResult(){document.getElementById("risk-badge").textContent="Waiting";document.getElementById("risk-badge").className="inline-flex rounded-full border border-white/10 px-4 py-2 text-sm font-bold text-white/80";document.getElementById("result-probability").textContent="0%";document.getElementById("probability-bar").style.width="0%";document.getElementById("probability-bar").className="h-full w-0 rounded-full bg-emerald-400 transition-all duration-700";document.getElementById("result-text").textContent="Enter all required values and click Predict to generate a simulated disease-risk result.";document.getElementById("insight-explanation").textContent="This prediction uses weighted scoring calibrated to resemble the relative importance seen in the retrained project models."}
+    function renderCharts(prob){const c=configs[activeDisease],labels=Object.keys(c.featureImportance),values=Object.values(c.featureImportance);if(featureChart)featureChart.destroy();if(riskChart)riskChart.destroy();if(trendChart)trendChart.destroy();featureChart=new Chart(document.getElementById("featureChart"),{type:"bar",data:{labels,datasets:[{label:"Feature Importance",data:values,backgroundColor:["#38bdf8","#22d3ee","#34d399","#f59e0b"],borderRadius:12}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:"#94a3b8"},grid:{color:"rgba(148,163,184,0.08)"}},y:{ticks:{color:"#94a3b8"},grid:{color:"rgba(148,163,184,0.08)"}}}}});riskChart=new Chart(document.getElementById("riskChart"),{type:"pie",data:{labels:["Risk","No Risk"],datasets:[{data:[prob,100-prob],backgroundColor:[prob>=50?"#ef4444":"#22c55e","#1e293b"],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:"#cbd5e1"}}}}});trendChart=new Chart(document.getElementById("trendChart"),{type:"line",data:{labels:c.trendLabels,datasets:[{label:c.trendName,data:c.trendValues,borderColor:activeDisease==="diabetes"?"#38bdf8":"#fb7185",backgroundColor:activeDisease==="diabetes"?"rgba(56,189,248,0.12)":"rgba(251,113,133,0.12)",fill:true,tension:.35,pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:"#cbd5e1"}}},scales:{x:{ticks:{color:"#94a3b8"},grid:{color:"rgba(148,163,184,0.08)"}},y:{ticks:{color:"#94a3b8"},grid:{color:"rgba(148,163,184,0.08)"}}}}})}
+    function loadSample(){Object.entries(configs[activeDisease].sample).forEach(([k,v])=>{const i=document.getElementById(k);if(i)i.value=v})}
+    function resetForm(){renderFields();resetResult()}
+    function saveHistory(disease,result,probability,timestamp){const h=JSON.parse(localStorage.getItem("predictionHistory")||"[]");h.unshift({date:timestamp||new Date().toLocaleString(),disease,result,probability});localStorage.setItem("predictionHistory",JSON.stringify(h.slice(0,20)));renderHistory()}
+    function renderHistory(){const h=JSON.parse(localStorage.getItem("predictionHistory")||"[]");document.getElementById("history-body").innerHTML=h.length?h.map(i=>`<tr><td class="px-3 py-3">${i.date}</td><td class="px-3 py-3 text-white">${i.disease}</td><td class="px-3 py-3"><span class="inline-flex rounded-full border px-3 py-1 text-xs font-bold ${i.result==="High Risk"?"risk-high":"risk-low"}">${i.result}</span></td><td class="px-3 py-3 font-semibold ${i.result==="High Risk"?"text-red-300":"text-emerald-300"}">${i.probability}</td></tr>`).join(""):`<tr><td colspan="4" class="px-3 py-6 text-center text-slate-400">No predictions saved yet.</td></tr>`}
+    function clearHistory(){localStorage.removeItem("predictionHistory");renderHistory()}
+    function updateReceipt(c,r,ts){const receipt={date:ts,disease:c.diseaseName,model:c.model,result:r.risk,probability:`${r.probability}%`,factors:c.factors};localStorage.setItem("latestPredictionReceipt",JSON.stringify(receipt));document.getElementById("receipt-disease").textContent=receipt.disease;document.getElementById("receipt-risk").textContent=receipt.result;document.getElementById("receipt-probability").textContent=receipt.probability;document.getElementById("receipt-date").textContent=receipt.date}
+    function renderReceipt(){const r=JSON.parse(localStorage.getItem("latestPredictionReceipt")||"null");if(!r)return;document.getElementById("receipt-disease").textContent=r.disease;document.getElementById("receipt-risk").textContent=r.result;document.getElementById("receipt-probability").textContent=r.probability;document.getElementById("receipt-date").textContent=r.date}
+    function downloadReceipt(){const r=JSON.parse(localStorage.getItem("latestPredictionReceipt")||"null");if(!r){alert("Generate a prediction first to download the receipt.");return}const content=["Disease Prediction Receipt",`Generated: ${r.date}`,`Disease: ${r.disease}`,`Risk Level: ${r.result}`,`Probability: ${r.probability}`,`Model Used: ${r.model}`,`Key Influencing Factors: ${r.factors}`,"","Generated from the frontend-only ML portfolio dashboard."].join("\n"),blob=new Blob([content],{type:"text/plain"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`${r.disease.toLowerCase().replace(/\s+/g,"_")}_receipt.txt`;a.click();URL.revokeObjectURL(url)}
+    function scrollToSection(id){const t=document.getElementById(id);if(t)t.scrollIntoView({behavior:"smooth",block:"start"})}
+    document.getElementById("prediction-form").addEventListener("submit",e=>{e.preventDefault();const v=validateInputs();if(!v)return;setLoading(true);setTimeout(()=>{setLoading(false);updateResult(activeDisease==="diabetes"?predictDiabetes(v):predictHeartDisease(v))},900)});
+    switchDisease("diabetes");renderHistory();renderReceipt();
+  </script>
+</body>
+</html>

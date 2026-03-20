@@ -1,0 +1,6 @@
+model,cv_accuracy,test_accuracy,precision,recall,f1,roc_auc
+Tuned XGBoost,73.33,73.49,75.54,68.67,71.94,79.64
+Tuned Random Forest,73.22,73.45,75.51,68.61,71.9,79.65
+Soft Voting Ensemble,73.3,73.41,75.41,68.67,71.88,79.63
+Random Forest + SMOTE,73.03,73.39,75.11,69.14,72.0,79.54
+Logistic Regression (balanced),73.03,73.04,75.62,67.19,71.15,79.08

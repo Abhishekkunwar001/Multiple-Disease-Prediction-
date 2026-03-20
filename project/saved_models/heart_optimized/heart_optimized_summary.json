@@ -1,0 +1,259 @@
+{
+  "analysis": {
+    "shape": [
+      70000,
+      13
+    ],
+    "missing_values": {
+      "id": 0,
+      "age": 0,
+      "gender": 0,
+      "height": 0,
+      "weight": 0,
+      "ap_hi": 0,
+      "ap_lo": 0,
+      "cholesterol": 0,
+      "gluc": 0,
+      "smoke": 0,
+      "alco": 0,
+      "active": 0,
+      "cardio": 0
+    },
+    "class_distribution": {
+      "0": 35021,
+      "1": 34979
+    },
+    "numeric_summary": {
+      "id": {
+        "count": 70000.0,
+        "mean": 49972.42,
+        "std": 28851.302,
+        "min": 0.0,
+        "25%": 25006.75,
+        "50%": 50001.5,
+        "75%": 74889.25,
+        "max": 99999.0
+      },
+      "age": {
+        "count": 70000.0,
+        "mean": 19468.866,
+        "std": 2467.252,
+        "min": 10798.0,
+        "25%": 17664.0,
+        "50%": 19703.0,
+        "75%": 21327.0,
+        "max": 23713.0
+      },
+      "gender": {
+        "count": 70000.0,
+        "mean": 1.35,
+        "std": 0.477,
+        "min": 1.0,
+        "25%": 1.0,
+        "50%": 1.0,
+        "75%": 2.0,
+        "max": 2.0
+      },
+      "height": {
+        "count": 70000.0,
+        "mean": 164.359,
+        "std": 8.21,
+        "min": 55.0,
+        "25%": 159.0,
+        "50%": 165.0,
+        "75%": 170.0,
+        "max": 250.0
+      },
+      "weight": {
+        "count": 70000.0,
+        "mean": 74.206,
+        "std": 14.396,
+        "min": 10.0,
+        "25%": 65.0,
+        "50%": 72.0,
+        "75%": 82.0,
+        "max": 200.0
+      },
+      "ap_hi": {
+        "count": 70000.0,
+        "mean": 128.817,
+        "std": 154.011,
+        "min": -150.0,
+        "25%": 120.0,
+        "50%": 120.0,
+        "75%": 140.0,
+        "max": 16020.0
+      },
+      "ap_lo": {
+        "count": 70000.0,
+        "mean": 96.63,
+        "std": 188.473,
+        "min": -70.0,
+        "25%": 80.0,
+        "50%": 80.0,
+        "75%": 90.0,
+        "max": 11000.0
+      },
+      "cholesterol": {
+        "count": 70000.0,
+        "mean": 1.367,
+        "std": 0.68,
+        "min": 1.0,
+        "25%": 1.0,
+        "50%": 1.0,
+        "75%": 2.0,
+        "max": 3.0
+      },
+      "gluc": {
+        "count": 70000.0,
+        "mean": 1.226,
+        "std": 0.572,
+        "min": 1.0,
+        "25%": 1.0,
+        "50%": 1.0,
+        "75%": 1.0,
+        "max": 3.0
+      },
+      "smoke": {
+        "count": 70000.0,
+        "mean": 0.088,
+        "std": 0.283,
+        "min": 0.0,
+        "25%": 0.0,
+        "50%": 0.0,
+        "75%": 0.0,
+        "max": 1.0
+      },
+      "alco": {
+        "count": 70000.0,
+        "mean": 0.054,
+        "std": 0.226,
+        "min": 0.0,
+        "25%": 0.0,
+        "50%": 0.0,
+        "75%": 0.0,
+        "max": 1.0
+      },
+      "active": {
+        "count": 70000.0,
+        "mean": 0.804,
+        "std": 0.397,
+        "min": 0.0,
+        "25%": 1.0,
+        "50%": 1.0,
+        "75%": 1.0,
+        "max": 1.0
+      },
+      "cardio": {
+        "count": 70000.0,
+        "mean": 0.5,
+        "std": 0.5,
+        "min": 0.0,
+        "25%": 0.0,
+        "50%": 0.0,
+        "75%": 1.0,
+        "max": 1.0
+      }
+    },
+    "correlation_with_target": {
+      "cardio": 1.0,
+      "age": 0.2382,
+      "cholesterol": 0.2211,
+      "weight": 0.1817,
+      "gluc": 0.0893,
+      "ap_lo": 0.0657,
+      "ap_hi": 0.0545,
+      "gender": 0.0081,
+      "id": 0.0038,
+      "alco": -0.0073,
+      "height": -0.0108,
+      "smoke": -0.0155,
+      "active": -0.0357
+    }
+  },
+  "dropped_high_correlation_features": [
+    "weight_height_ratio"
+  ],
+  "rf_best_params": {
+    "model__n_estimators": 250,
+    "model__min_samples_split": 2,
+    "model__min_samples_leaf": 2,
+    "model__max_features": "sqrt",
+    "model__max_depth": 8
+  },
+  "xgb_best_params": {
+    "model__subsample": 0.9,
+    "model__n_estimators": 400,
+    "model__min_child_weight": 3,
+    "model__max_depth": 3,
+    "model__learning_rate": 0.05,
+    "model__colsample_bytree": 0.75
+  },
+  "best_model": "Tuned XGBoost",
+  "best_metrics": {
+    "cv_accuracy": 73.33,
+    "test_accuracy": 73.49,
+    "precision": 75.54,
+    "recall": 68.67,
+    "f1": 71.94,
+    "roc_auc": 79.64
+  },
+  "comparison_table": [
+    {
+      "model": "Tuned XGBoost",
+      "cv_accuracy": 73.33,
+      "test_accuracy": 73.49,
+      "precision": 75.54,
+      "recall": 68.67,
+      "f1": 71.94,
+      "roc_auc": 79.64
+    },
+    {
+      "model": "Tuned Random Forest",
+      "cv_accuracy": 73.22,
+      "test_accuracy": 73.45,
+      "precision": 75.51,
+      "recall": 68.61,
+      "f1": 71.9,
+      "roc_auc": 79.65
+    },
+    {
+      "model": "Soft Voting Ensemble",
+      "cv_accuracy": 73.3,
+      "test_accuracy": 73.41,
+      "precision": 75.41,
+      "recall": 68.67,
+      "f1": 71.88,
+      "roc_auc": 79.63
+    },
+    {
+      "model": "Random Forest + SMOTE",
+      "cv_accuracy": 73.03,
+      "test_accuracy": 73.39,
+      "precision": 75.11,
+      "recall": 69.14,
+      "f1": 72.0,
+      "roc_auc": 79.54
+    },
+    {
+      "model": "Logistic Regression (balanced)",
+      "cv_accuracy": 73.03,
+      "test_accuracy": 73.04,
+      "precision": 75.62,
+      "recall": 67.19,
+      "f1": 71.15,
+      "roc_auc": 79.08
+    }
+  ],
+  "feature_engineering_notes": [
+    "age_years: interpretable age scale",
+    "bmi: body-composition risk indicator",
+    "pulse_pressure and mean_arterial_pressure: pressure dynamics",
+    "bp_ratio: systolic-diastolic relationship",
+    "chol_gluc_risk: combined metabolic burden",
+    "age_bp_ratio and age_chol_ratio: age-normalized risk measures",
+    "activity_smoke_interaction: joint lifestyle signal",
+    "age_group and bmi_group: coarse non-linear risk bands",
+    "Heart-rate ratio was not created because cardio_train.csv does not contain a heart-rate feature."
+  ]
+}
