@@ -13,6 +13,7 @@ import json
 import os
 
 import joblib
+import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -89,7 +90,7 @@ def train_pool(x_train, x_test, y_train, y_test, features):
     pool = {
         "Logistic Regression": LogisticRegression(max_iter=1000, random_state=42),
         "Random Forest": RandomForestClassifier(
-            n_estimators=200, max_depth=12, random_state=42, n_jobs=-1
+            n_estimators=200, max_depth=12, random_state=42, n_jobs=1
         ),
     }
     if HAS_XGB:
